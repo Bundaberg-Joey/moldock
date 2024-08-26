@@ -7,6 +7,9 @@ build:
 push:
 	docker push $(IMAGE)
 
+format:
+	black moldock/
+
 
 run:
 	uvicorn moldock.main:app --reload

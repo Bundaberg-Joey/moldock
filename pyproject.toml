@@ -13,6 +13,10 @@ metaflow = "^2.12.15"
 fastapi = "^0.112.1"
 uvicorn = "^0.30.6"
 
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+ipython = "^8.26.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
