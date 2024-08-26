@@ -34,6 +34,4 @@ COPY --from=docking_tools /tool_downloads/smina /bin/
 
 RUN pip install *.whl && rm *.whl
 
-
-# env runs fine / install things, but cant get app to run locally... worry about that once everything is set up and spoken with faiz
-# CMD ["uvicorn", "moldock.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "moldock.http_api.main:app", "--host", "0.0.0.0", "--port", "8000"]

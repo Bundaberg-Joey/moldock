@@ -1,0 +1,10 @@
+version: '3.8'  # Specify the Compose file version
+
+services:
+  moldock:  # You can name this service anything
+    image: crh201/moldock:0.1.0  # The image name and tag
+    ports:
+      - "8000:8000"  # Maps port 8000 on the host to port 8000 in the container
+
+
+# docker run -p 8000:8000 crh201/moldock:0.1.0

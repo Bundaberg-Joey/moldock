@@ -12,4 +12,4 @@ format:
 
 
 run:
-	uvicorn moldock.main:app --reload
+	docker compose up -d 
