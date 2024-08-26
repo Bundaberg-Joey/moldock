@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter
 
 from moldock.http_api.dto import DockingJobRequest, DockingJobResult
@@ -7,7 +9,7 @@ route = APIRouter()
 
 
 @route.post("/dock/", response_model=DockingJobResult)
-async def predict(body: DockingJobRequest):
+def predict(body: DockingJobRequest):
     docker = DockingSimulation(server=body.server)
     results_filepath = docker.dock_ligands(
         receptor_path=body.receptor_path,
@@ -15,3 +17,8 @@ async def predict(body: DockingJobRequest):
         s3_root=body.s3_root,
     )
     return {"results_filepath": results_filepath, "message": "Docking complete"}
+
+
+@route.get("/healthcheck/")
+def health_check():
+    return {"message": f"Service Reachable as of {datetime.now()}"}

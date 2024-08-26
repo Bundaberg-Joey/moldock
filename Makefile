@@ -1,5 +1,4 @@
-PACKAGE_VERSION := $(shell poetry version --short)
-IMAGE := $(IMAGE_REPO)/moldock:$(PACKAGE_VERSION)
+IMAGE := $(IMAGE_REPO)/$(IMAGE_NAME):$(VERSION_TAG)
 
 build:
 	docker build -t $(IMAGE) .
