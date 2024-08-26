@@ -21,9 +21,9 @@ class DockingSimulation:
 
         self.runner_kwargs = {**self.runner_kwargs, **server_kwargs}
 
-    def dock_ligands(self, receptor_path: str, ligand_path: str):
+    def dock_ligands(self, receptor_path: str, ligand_path: str, s3_root: str):
         with Runner(**self.runner_kwargs).run(
-            receptor_path=receptor_path, ligand_path=ligand_path
+            receptor_path=receptor_path, ligand_path=ligand_path, s3_root=s3_root
         ) as latest_run:
 
             while not latest_run.finished:
