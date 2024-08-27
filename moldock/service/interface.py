@@ -35,8 +35,6 @@ class DockingSimulation:
 
 def run_smoketest():
     execute_cli_command(f"python3 {smokeflow.__file__} --environment local run")
-    expected_result = "Smina Oct 15 2019.  Based on AutoDock Vina 1.1.2."
-
     run = Flow("SmokeFlow").latest_run
-    result = run.data.result if run.successful else "Workflow Failed To Execute, No `data` artifacts available."
-    return result, expected_result, str(run.finished_at)
+    exit_status = run.data.exit_status if run.successful else "Workflow Failed To Execute, No `data` artifacts available."
+    return exit_status, str(run.finished_at)

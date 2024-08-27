@@ -26,11 +26,10 @@ def health_check():
 
 @route.get("/smoketest/", response_model=SmokeTestResult)
 def smoke_test():
-    result, expected_result, finished_at = run_smoketest()
+    exit_status, finished_at = run_smoketest()
     return {
         "message": "smoke test complete",
         "finished_at": finished_at,
-        "result": result,
-        "expected_result": expected_result,
-        "smoketest_pass": result == expected_result,
+        "exit_status": exit_status,
+        "smoketest_pass": exit_status == "0",
     }

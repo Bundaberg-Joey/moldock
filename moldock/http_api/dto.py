@@ -13,7 +13,6 @@ class DockingJobResult(BaseModel):
 
 
 class SmokeTestResult(BaseModel):
-    result: str
+    exit_status: str
     finished_at: str
-    expected_result: str
     smoketest_pass: bool

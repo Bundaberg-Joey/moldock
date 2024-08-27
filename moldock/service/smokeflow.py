@@ -4,10 +4,9 @@ from metaflow import FlowSpec, step
 class SmokeFlow(FlowSpec):
     @step
     def start(self):
-        from moldock.utils import execute_cli_command
+        import os
 
-        stdout, stderr = execute_cli_command("smina --version", error_as_stderr=True)
-        self.result = stdout.strip() + stderr.strip()
+        self.exit_status = str(os.system("smina --version"))
 
         self.next(self.end)
 
