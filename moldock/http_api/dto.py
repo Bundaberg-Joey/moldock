@@ -10,3 +10,10 @@ class DockingJobRequest(BaseModel):
 
 class DockingJobResult(BaseModel):
     results_filepath: str
+
+
+class SmokeTestResult(BaseModel):
+    result: str
+    finished_at: str
+    expected_result: str
+    smoketest_pass: bool

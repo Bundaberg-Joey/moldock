@@ -25,7 +25,7 @@ class DockingFlow(FlowSpec):
     @step
     def dock(self):
         from metaflow import S3
-        from moldock.core.docking_software import Smina
+        from moldock.core.smina import Smina
 
         # TODO : download S3 files here for receptor and ligand
 

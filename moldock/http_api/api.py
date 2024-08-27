@@ -2,8 +2,8 @@ from datetime import datetime
 
 from fastapi import APIRouter
 
-from moldock.http_api.dto import DockingJobRequest, DockingJobResult
-from moldock.service.interface import DockingSimulation
+from moldock.http_api.dto import DockingJobRequest, DockingJobResult, SmokeTestResult
+from moldock.service.interface import DockingSimulation, run_smoketest
 
 route = APIRouter()
 
@@ -22,3 +22,15 @@ def predict(body: DockingJobRequest):
 @route.get("/healthcheck/")
 def health_check():
     return {"message": f"Service Reachable as of {datetime.now()}"}
+
+
+@route.get("/smoketest/", response_model=SmokeTestResult)
+def smoke_test():
+    result, expected_result, finished_at = run_smoketest()
+    return {
+        "message": "smoke test complete",
+        "finished_at": finished_at,
+        "result": result,
+        "expected_result": expected_result,
+        "smoketest_pass": result == expected_result,
+    }

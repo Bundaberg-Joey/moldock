@@ -10,5 +10,8 @@ format:
 	black moldock/
 
 
+local:
+	uvicorn moldock.http_api.main:app
+
 run:
 	docker compose up -d 

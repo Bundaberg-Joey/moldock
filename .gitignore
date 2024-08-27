@@ -3,3 +3,4 @@
 *.pdb
 *.pyc
 *__pycache__*
+*.metaflow

@@ -1,21 +1,4 @@
-import subprocess
-
-
-class CliExecutionError(Exception):
-    pass
-
-
-def execute_cli_command(command: str, **kwargs):
-    try:
-        process_result = subprocess.run(str(command).split(), **kwargs)
-    except (
-        subprocess.TimeoutExpired,
-        subprocess.CalledProcessError,
-        FileNotFoundError,
-    ) as e:
-        raise CliExecutionError(f"{command} failed to run : {e}")
-
-    return (r.decode("utf-8") for r in (process_result.stdout, process_result.stderr))
+from moldock.utils import execute_cli_command
 
 
 class Smina:
