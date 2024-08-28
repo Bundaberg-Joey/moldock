@@ -12,50 +12,43 @@ class DockingFlow(FlowSpec):
     @step
     def start(self):
         import os
-
-        if not (
-            os.path.exists(self.receptor_path) and os.path.exists(self.ligand_path)
-        ):
-            raise ValueError(
-                f"Either receptor or ligand specified not available at locations."
-            )
-
-        self.next(self.dock)
-
-    @step
-    def dock(self):
-        from metaflow import S3
         from moldock.core.smina import Smina
+        from moldock.service.utils import download_s3_uri, upload_s3_uri
 
-        # TODO : download S3 files here for receptor and ligand
+        # Download input files from S3
+        receptor_file = download_s3_uri(self.receptor_path)
+        ligand_file = download_s3_uri(self.ligand_path)
 
+        # Run molecular docking
         smina = Smina()
-        smina.specify_receptor(self.receptor_path)
-        output_path = smina.dock_ligand(self.ligand_path)
+        smina.specify_receptor(receptor_file)
+        output_path = smina.dock_ligand(ligand_file)
 
-        with S3(s3_root=self.s3_root) as s3:
-            s3.put([("s3_key", output_path)])
+        # Upload for processing in next step
+        self.docking_output_uri = os.path.join(self.s3_root, output_path)
+        print(self.docking_output_uri)
+        upload_s3_uri(self.docking_output_uri)
 
         self.next(self.end)
 
     @step
     def end(self):
-        from metaflow import S3
+        import os
+        from moldock.service.utils import download_s3_uri, upload_s3_uri
         from rdkit.Chem import PandasTools, MolToSmiles
 
-        with S3(s3_root=self.s3_root) as s3:
-            path = s3.get("s3_path_upload_to_before").path
-            df = PandasTools.LoadSDF(path, molColName="_Molecule")
+        # Download and read using rdkit tools
+        docking_output_file = download_s3_uri(self.docking_output_uri)
+        df = PandasTools.LoadSDF(docking_output_file, molColName="_Molecule")
 
         if "smiles" not in [c.lower() for c in df.columns]:
             df["smiles"] = [MolToSmiles(mol) for mol in df["_Molecule"].tolist()]
 
-        df = df.groupby(["smiles"])[["minimizedAffinity"]].mean()
-
-        with S3(s3_root=self.s3_root) as s3:
-            s3.put(key="filename", obj=df.to_csv())
-
-        self.results_path = "full path to results in s3"
+        df["minimizedAffinity"] = df["minimizedAffinity"].astype(float)
+        df = df.groupby(["smiles"], as_index=False)[["minimizedAffinity"]].mean()
+        df.to_csv("averaged_affinity.csv", index=False)
+        self.results_path = os.path.join(self.s3_root, "averaged_affinity.csv")
+        upload_s3_uri(self.results_path)
 
 
 if __name__ == "__main__":
