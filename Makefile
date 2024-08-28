@@ -9,6 +9,8 @@ push:
 format:
 	black moldock/
 
+clean:
+	rm -rf .metaflow
 
 local:
 	uvicorn moldock.http_api.main:app
