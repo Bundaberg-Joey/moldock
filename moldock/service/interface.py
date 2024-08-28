@@ -5,7 +5,6 @@ from metaflow import Run
 
 from moldock.service import smokeflow, workflow
 from moldock.service.utils import launch_metaflow_workflow
-from moldock.utils import execute_cli_command
 
 
 class DockingSimulation:
@@ -25,7 +24,7 @@ class DockingSimulation:
 
     def dock_ligands(self, receptor_path: str, ligand_path: str, s3_root: str):
         run_id = launch_metaflow_workflow(
-            f"{self.base_command} --recept_path {receptor_path} --ligand_path {ligand_path} --s3_root {s3_root}"
+            f"{self.base_command} --receptor_path {receptor_path} --ligand_path {ligand_path} --s3_root {s3_root}"
         )
         run = Run(f"DockingFlow/{run_id}")
         while not run.finished:
