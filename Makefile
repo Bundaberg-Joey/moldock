@@ -1,4 +1,4 @@
-IMAGE := $(IMAGE_REPO)/$(IMAGE_NAME):$(VERSION_TAG)
+IMAGE := $(IMAGE_REPO)/$(IMAGE_NAME):latest
 
 build:
 	docker build -t $(IMAGE) .

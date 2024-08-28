@@ -1,6 +1,6 @@
 services:
   
   moldock:
-    image: ${IMAGE_REPO}/${IMAGE_NAME}:${VERSION_TAG}
+    image: ${IMAGE_REPO}/${IMAGE_NAME}:latest
     ports:
       - "8000:8000"
