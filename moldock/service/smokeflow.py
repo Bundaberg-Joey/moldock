@@ -1,7 +1,9 @@
-from metaflow import FlowSpec, step
+from metaflow import FlowSpec, step, batch
 
 
 class SmokeFlow(FlowSpec):
+    
+    @batch(image='crh201/moldock:latest', cpu=1)
     @step
     def start(self):
         import os
@@ -10,6 +12,7 @@ class SmokeFlow(FlowSpec):
 
         self.next(self.end)
 
+    @batch(image='crh201/moldock:latest', cpu=1)
     @step
     def end(self):
         pass
