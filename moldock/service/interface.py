@@ -22,9 +22,9 @@ class DockingSimulation:
             )
         self.base_command += " run"
 
-    def dock_ligands(self, receptor_path: str, ligand_path: str, s3_root: str):
+    def dock_ligands(self, uniprot_id: str, ligand_path: str, s3_root: str):
         run_id = launch_metaflow_workflow(
-            f"{self.base_command} --receptor_path {receptor_path} --ligand_path {ligand_path} --s3_root {s3_root}"
+            f"{self.base_command} --uniprot_id {uniprot_id} --ligand_path {ligand_path} --s3_root {s3_root}"
         )
         run = Run(f"DockingFlow/{run_id}")
         while not run.finished:

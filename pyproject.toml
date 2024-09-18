@@ -12,6 +12,7 @@ rdkit = "^2024.3.5"
 metaflow = "^2.12.15"
 fastapi = "^0.112.1"
 uvicorn = "^0.30.6"
+requests = "^2.32.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

@@ -12,7 +12,7 @@ route = APIRouter()
 def predict(body: DockingJobRequest):
     docker = DockingSimulation(server=body.server)
     results_filepath = docker.dock_ligands(
-        receptor_path=body.receptor_path,
+        uniprot_id=body.uniprot_id,
         ligand_path=body.ligand_path,
         s3_root=body.s3_root,
     )

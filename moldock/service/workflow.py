@@ -3,8 +3,8 @@ from metaflow import FlowSpec, step, Parameter, batch
 
 class DockingFlow(FlowSpec):
 
-    receptor_path = Parameter(
-        "receptor_path", type=str, help="Path to receptor pdb file"
+    uniprot_id = Parameter(
+        "uniprot_id", type=str, help="Uniprot accession id"
     )
     ligand_path = Parameter("ligand_path", type=str, help="Path to ligand sdf file")
     s3_root = Parameter("s3_root", type=str, help="S3 directory to write results to")
@@ -14,15 +14,19 @@ class DockingFlow(FlowSpec):
     def start(self):
         import os
         from moldock.core.smina import Smina
+        from moldock.core.protein import get_pdb_from_alphafold
         from moldock.service.utils import download_s3_uri, upload_s3_uri
 
-        # Download input files from S3
-        receptor_file = download_s3_uri(self.receptor_path)
+        # Download ligand file(s) from S3
         ligand_file = download_s3_uri(self.ligand_path)
-
+        
+        # Get protein PDB file from alphafold API and write to file
+        with open('receptor.pdb', 'w') as f:
+            f.write(get_pdb_from_alphafold(self.uniprot_id))
+        
         # Run molecular docking
         smina = Smina()
-        smina.specify_receptor(receptor_file)
+        smina.specify_receptor('receptor.pdb')
         output_path = smina.dock_ligand(ligand_file)
 
         # Upload for processing in next step

@@ -1,4 +1,4 @@
-IMAGE := $(IMAGE_REPO)/$(IMAGE_NAME):latest
+IMAGE := crh201/moldock:latest
 
 build:
 	docker build -t $(IMAGE) .
