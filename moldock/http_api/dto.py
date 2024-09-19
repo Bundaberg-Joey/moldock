@@ -12,6 +12,10 @@ class DockingJobResult(BaseModel):
     results_filepath: str
 
 
+class SmokeFlowRequest(BaseModel):
+    server: str = "local"
+
+
 class SmokeTestResult(BaseModel):
     exit_status: str
     finished_at: str

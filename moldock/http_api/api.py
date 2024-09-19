@@ -2,7 +2,7 @@ from datetime import datetime
 
 from fastapi import APIRouter
 
-from moldock.http_api.dto import DockingJobRequest, DockingJobResult, SmokeTestResult
+from moldock.http_api.dto import DockingJobRequest, DockingJobResult, SmokeTestResult, SmokeFlowRequest
 from moldock.service.interface import DockingSimulation, run_smoketest
 
 route = APIRouter()
@@ -24,9 +24,9 @@ def health_check():
     return {"message": f"Service Reachable as of {datetime.now()}"}
 
 
-@route.get("/smoketest/", response_model=SmokeTestResult)
-def smoke_test():
-    exit_status, finished_at = run_smoketest()
+@route.post("/smoketest/", response_model=SmokeTestResult)
+def smoke_test(body: SmokeFlowRequest):
+    exit_status, finished_at = run_smoketest(server=body.server)
     return {
         "message": "smoke test complete",
         "finished_at": finished_at,

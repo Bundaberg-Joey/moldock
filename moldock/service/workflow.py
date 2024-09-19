@@ -1,4 +1,4 @@
-from metaflow import FlowSpec, step, Parameter, batch
+from metaflow import FlowSpec, step, Parameter
 
 
 class DockingFlow(FlowSpec):
@@ -9,7 +9,6 @@ class DockingFlow(FlowSpec):
     ligand_path = Parameter("ligand_path", type=str, help="Path to ligand sdf file")
     s3_root = Parameter("s3_root", type=str, help="S3 directory to write results to")
 
-    @batch(image='crh201/moldock:latest', cpu=4)
     @step
     def start(self):
         import os
@@ -36,7 +35,6 @@ class DockingFlow(FlowSpec):
 
         self.next(self.end)
 
-    @batch(image='crh201/moldock:latest', cpu=1)
     @step
     def end(self):
         import os
